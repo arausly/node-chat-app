@@ -19,11 +19,21 @@ let io = socketIO(server);
 
 io.on('connection', (socket) => {
 	console.log('New user connected');
-
-	socket.on('disconnect', (socket) => {
+	
+	socket.on('createMessage',(msg)=>{
+		console.log('new message',msg)
+		//to broadcast event to all users when a new message is created
+		io.emit('new Message',{
+			from:msg.to,
+			text:msg.text,
+			createdAt:new Date().getTime()
+		})
+	})
+	
+	socket.on('disconnect', (socket) =>{
 		console.log('User disconnected');
 	})
-})
+});
 
 
 

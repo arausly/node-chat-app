@@ -9,18 +9,6 @@
 		<div id="main"></div>
 		<script src="./bundle.js"></script>
 		<script src="http://localhost:9000/socket.io/socket.io.js"></script>
-		<script>
-			//makes a request to the server to keep websocket open.
-			//made available through socket.io
-		   var socket = io();
-			
-	       socket.on('connect',()=>{
-			   console.log('Connected to Server');
-		   });
-			
-			socket.on('disconnect',()=>{
-				console.log('Disconnected from Server');
-			})
-		</script>
+		<script src="./js/socket.js"></script>
 	</body>
 </html>
