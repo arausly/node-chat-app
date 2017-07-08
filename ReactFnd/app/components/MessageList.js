@@ -24,9 +24,5 @@ export default class MessageList extends Component{
 
 
 MessageList.propTypes ={
-	message(props,propName,component){
-		if( typeof props[propName] === "object"){
-			console.log(props[propName]);
-		}
-	}
+ message:PropTypes.array.isRequired,
 }

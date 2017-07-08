@@ -5,19 +5,13 @@ const io = require('socket.io-client');
 import Form  from './form';
 import MessageList from './MessageList';
 
-//const decidePath = () =>{
-//	if(process.env.NODE_ENV="development" || process.env.PORT == 9000){
-//		 const path = "http://localhost:9000"
-//		 return path;
-//	}
-//}
 
-const socket = io.connect("http://localhost:9000"); 
+const socket = io.connect(); 
 
 export default class Home extends Component{
 	constructor(props){
 		super(props);
-		this.handleMsgVal =this.handleMsgVal.bind(this);
+		this.handleMsgVal = this.handleMsgVal.bind(this);
 		this.state = {
 			text:[]
 		}
@@ -25,7 +19,6 @@ export default class Home extends Component{
 
 
 	handleMsgVal(val){
-
 		socket.emit('createMessage',{
 			from:"Arausi Daniel",
 			text:val
@@ -33,25 +26,37 @@ export default class Home extends Component{
 			console.log(info);
 		});
 	}
+
+    componentWillMount(){
+		socket.on('connect',()=>{
+		  console.log('Connected to Server');
+		});
+		socket.on('new Message',(msg)=>{
+			console.log('new Message',msg);
+		});
+		socket.on('disconnect',()=>{
+			console.log('Disconencted from Server');
+		});
+	}
 	
 	componentDidMount(){
 		socket.on('new Message',(msgObj)=>{
-			 let msgStore = []; 
-			 msgStore.push(msgObj.text);
-			let totalMsg = this.state.text.concat(msgStore);
+			 let msgStore = [];
+			 msgStore.push(`${msgObj.from}.  ${msgObj.text}`);
+			let totalMsg = this.state.text.concat(msgStore);	
 			this.setState({text:totalMsg});
 		})
 	}
-  
-
-
+	
 	render(){
 		return(
 			<div>
-			<Form handleMsgValue = {this.handleMsgVal} />
-			<div> 
-			<MessageList message={this.state.text} />
-			</div>	
+				<div> 
+					<MessageList message={this.state.text} />
+				</div>	
+				<div>
+					<Form handleMsgValue = {this.handleMsgVal} />
+				</div>
 			</div>	 
 		); 
 	}
