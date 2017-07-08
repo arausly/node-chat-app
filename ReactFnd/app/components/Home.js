@@ -12,8 +12,11 @@ export default class Home extends Component{
 	constructor(props){
 		super(props);
 		this.handleMsgVal = this.handleMsgVal.bind(this);
+		this.handleClick = this.handleClick.bind(this)
 		this.state = {
-			text:[]
+			text:[],
+			locationUrl:'',
+			locationUser:''
 		}
 	}
 
@@ -48,14 +51,36 @@ export default class Home extends Component{
 		})
 	}
 	
+	    handleClick(){
+		if(!navigator.geolocation){
+			return alert('Your browser does not support geolocation')
+		}
+		navigator.geolocation.getCurrentPosition((position)=>{
+			console.log(position);
+			socket.emit('createLocationMessage',{
+				latitude:position.coords.latitude,
+				longitude:position.coords.longitude,
+			})
+		},()=>{
+			 alert('unable to fetch current location');
+		});
+		
+		socket.on('newLocationMessage',(message)=>{
+			 this.setState({
+				             locationUrl:`${message.url}`,
+						     locationUser:`${message.from}`
+			              });
+		})
+	}
+	
 	render(){
 		return(
 			<div>
 				<div> 
-					<MessageList message={this.state.text} />
+					<MessageList message={this.state.text}  url={this.state.locationUrl} user={this.state.locationUser}/>
 				</div>	
 				<div>
-					<Form handleMsgValue = {this.handleMsgVal} />
+					<Form handleMsgValue = {this.handleMsgVal} handleClick = {this.handleClick} />
 				</div>
 			</div>	 
 		); 

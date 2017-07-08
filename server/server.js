@@ -4,7 +4,8 @@ const path = require('path');
 const socketIO = require('socket.io');
 
 const {
-	generateMessage
+	generateMessage,
+	generateLocationMessage
 } = require('./action');
 
 let app = express();
@@ -30,15 +31,19 @@ io.on('connection', (socket) => {
 	socket.emit('new Message',generateMessage('Admin','Welcome to famchat'));
 	
     socket.broadcast.emit('new Message',generateMessage('Admin','New User joined'));
+	
+	socket.on('createLocationMessage',(locationObj)=>{
+		 io.emit('newLocationMessage',generateLocationMessage('Admin',locationObj.latitude,locationObj.longitude));
+	})
 
-	socket.on('createMessage', (msg,callback) => {
+	socket.on('createMessage',(msg,callback) => {
 		console.log('new message', msg)
 		//to broadcast event to all users when a new message is created
 		io.emit('new Message',generateMessage(msg.from,msg.text))
         callback('received data,but not sure how to validate');
 	})
  
-	socket.on('disconnect', (socket) => {
+	socket.on('disconnect', (socket) =>{
 		console.log('User disconnected');
 	})
 });
