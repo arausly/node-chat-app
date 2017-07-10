@@ -1,0 +1,15 @@
+.people{
+   position:absolute;
+   left:0;
+   top:0;
+   width:400px;
+   height:100%;
+   color:$white;
+   background-color:$bg-color;
+   font-size:(1.1 * $font-size);
+	margin:{
+		right:1rem;
+	}
+	text-align:center;
+	
+}

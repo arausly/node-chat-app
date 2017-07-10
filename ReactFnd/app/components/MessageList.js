@@ -7,46 +7,58 @@ const listStyle ={
 	display:'none'
 }
 
+const noStyle = {
+  listStyleType:"none",
+} 
+
+const transparent={
+	opacity:0.65,
+	fontSize:(1.1 * 16),
+}
+
+const bolden ={
+	fontWeight:"bold",
+	marginRight:"0.5rem",
+}
+
+const addSpace ={
+	marginBottom:"1rem",
+}
+
+//const concatStyle = Object.assign({},noStyle,addSpace);
 
 export default class MessageList extends Component{	 
 	render(){
 
-		const {url,user} = this.props;
+		const {location,message} = this.props;
 		const renderList = () =>{
-			if(url === undefined || url === "" || url.length === 0){
+			if(location.url === undefined || location.url === "" || location.url.length === 0){
                  return(
 					     <li style={listStyle}></li>
 					   );
 			}else{
 				return(
-			             <li>{user} <a href={url} target="_blank">My current location</a></li>
+			             <li><div><span style={bolden} >{location.user}</span> <span style={transparent}>{location.time}</span></div><a href={location.url} target="_blank">My current location</a></li>
 					  );
 			}
 		}
 		return(
 			<div>
-				<ol>
+				<ul style={noStyle} >
 					{
-						this.props.message.map(function(text, index){
-						return <li key={index}>{text}</li>
+						message.map((text,index)=>{
+			            
+						return <li key={index} style={addSpace}><div><span style={bolden}>{text.from}</span><span style={transparent}>{text.time}</span></div>{text.text}</li>
 					})
 					}
 				{renderList()}
-	         </ol>
+	         </ul>
 			</div>
 		);
 	}
 }
 
-
-		MessageList.propTypes ={
-		message:PropTypes.array.isRequired,
-			url(props,propName,component){
-			if(!(propName in props)){
-				throw new TypeError(`${propName} is undefined`);
-			}else if(!(propName.includes('google.com') > -1)){
-				throw new TypeError(`${propName} is incorrect`);
-			}
-		},
-			user:PropTypes.string.isRequired,
-	}
+MessageList.propTypes = {
+	message: PropTypes.array.isRequired,
+	location:PropTypes.object.isRequired,
+}

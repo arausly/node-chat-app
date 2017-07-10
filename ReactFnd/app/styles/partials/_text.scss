@@ -1,0 +1,48 @@
+.list-form {
+	position: absolute;
+	bottom: 0px;
+	left: 400px;
+	height: 100%;
+	.location {
+		height: 1.3rem;
+		color: $white;
+		background-color: $btn-color;
+		text-align: center;
+		padding: 1rem;
+		width: auto;
+		cursor: pointer;
+		position: absolute;
+		right: 25px;
+		top: 17px;
+		@include handle-fonts($font-size, bold);
+	}
+	.form-component {
+		position: absolute;
+		bottom: 0px;
+		background-color: $silver;
+		padding: 1rem;
+		width: 948px;
+		[name^="mess"] {
+			width: 700px;
+			height: 3rem;
+			text-indent: 1.5rem;
+			margin-right: 1rem;
+			font-size: $font-size;
+		}
+	}
+	.message-list {
+		top: 0px;
+		margin-bottom:1.5rem;
+	}
+	.sendBtn {
+		display: inline;
+		height: 3.3rem;
+		color: $white;
+		padding: 1rem;
+		background-color: $btn-color;
+		width: 4.6rem;
+		cursor: pointer;
+		border-width: 0px;
+		@include handle-fonts($font-size, bold);
+	}
+}

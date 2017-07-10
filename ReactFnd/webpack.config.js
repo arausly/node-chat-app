@@ -3,8 +3,8 @@ const webpack = require('webpack');
 
 module.exports = {
 	entry: [
-		'script-loader!jquery/dist/jquery.min.js',
-		'./app/app.js'
+		 './node_modules/jquery/dist/jquery.min.js',
+		 './app/app.js'
 	],
 	externals: {
 		jquery: 'jQuery',
@@ -13,7 +13,7 @@ module.exports = {
 		new webpack.ProvidePlugin({
 			'$': 'jquery',
 			'jquery': 'jQuery',
-			'jquery': 'jquery'
+			'jquery': 'jquery',
 		})
 	],
 	output: {
@@ -23,6 +23,9 @@ module.exports = {
 	resolve: {
 		modules: ['node_modules', path.resolve(__dirname, 'app')
 				 ],
+		alias:{
+			appStyles:'./app/styles/styles.scss',
+		},
 		extensions: ['.js', '.jsx', '.css', '.scss']
 	},
 	module: {

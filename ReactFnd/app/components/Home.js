@@ -1,12 +1,15 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 const io = require('socket.io-client');
+const moment = require('moment');
 
 import Form  from './form';
 import MessageList from './MessageList';
+import Members from './Members';
 
 
 const socket = io.connect(); 
+
 
 export default class Home extends Component{
 	constructor(props){
@@ -15,18 +18,24 @@ export default class Home extends Component{
 		this.handleClick = this.handleClick.bind(this)
 		this.state = {
 			text:[],
-			locationUrl:'',
-			locationUser:''
+			location:{
+				url:'',
+				user:'',
+				time:''
+			},
+			status:'pending',
+			isFetching:false,
 		}
 	}
 
 
 	handleMsgVal(val){
+		this.setState({status:"pending"});
 		socket.emit('createMessage',{
 			from:"Arausi Daniel",
 			text:val
-		},function(info){
-			console.log(info);
+		},()=>{
+			this.setState({status:'finished'});
 		});
 	}
 
@@ -45,7 +54,13 @@ export default class Home extends Component{
 	componentDidMount(){
 		socket.on('new Message',(msgObj)=>{
 			 let msgStore = [];
-			 msgStore.push(`${msgObj.from}.  ${msgObj.text}`);
+			 let time = moment(msgObj.createdAt).format('h:mm a'); 
+			 let msgBox = {
+				 from:msgObj.from,
+				 time,
+				 text:msgObj.text,
+			 };
+			 msgStore.push(msgBox);
 			let totalMsg = this.state.text.concat(msgStore);	
 			this.setState({text:totalMsg});
 		})
@@ -55,6 +70,7 @@ export default class Home extends Component{
 		if(!navigator.geolocation){
 			return alert('Your browser does not support geolocation')
 		}
+			this.setState({isFetching:true});
 		navigator.geolocation.getCurrentPosition((position)=>{
 			console.log(position);
 			socket.emit('createLocationMessage',{
@@ -63,12 +79,17 @@ export default class Home extends Component{
 			})
 		},()=>{
 			 alert('unable to fetch current location');
+			 this.setState({isFetching:false});
 		});
 		
 		socket.on('newLocationMessage',(message)=>{
 			 this.setState({
-				             locationUrl:`${message.url}`,
-						     locationUser:`${message.from}`
+				             location:{
+								 url:`${message.url}`,
+				                 user:`${message.from}`,
+                                 time:`${moment(message.createdAt).format('h:mm a')}`
+							  },
+				             isFetching:false,
 			              });
 		})
 	}
@@ -76,12 +97,18 @@ export default class Home extends Component{
 	render(){
 		return(
 			<div>
+			 <div className="people">
+			      <Members />
+			    </div>
+			  <div className="list-form">
 				<div> 
-					<MessageList message={this.state.text}  url={this.state.locationUrl} user={this.state.locationUser}/>
+					<MessageList className="message-list" message={this.state.text}  location={this.state.location}/>
 				</div>	
-				<div>
-					<Form handleMsgValue = {this.handleMsgVal} handleClick = {this.handleClick} />
+				<div className="form-component">
+					<Form handleMsgValue = {this.handleMsgVal} handleClick = {this.handleClick} newStatus ={this.state.status} fetching ={this.state.isFetching}/>
 				</div>
+			    </div>
+			    
 			</div>	 
 		); 
 	}
