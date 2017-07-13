@@ -48,7 +48,9 @@ io.on('connection', (socket) => {
 	})
 });
 
-
+app.get('*',(req,res)=>{
+	res.sendFile(path.join(__dirname,'..','reactFnd','public','index.html'));
+})
 
 server.listen(port, () => {
 	console.log(`app is listening on port ${port}`);

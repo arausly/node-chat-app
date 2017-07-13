@@ -15,7 +15,7 @@ export default class Home extends Component{
 	constructor(props){
 		super(props);
 		this.handleMsgVal = this.handleMsgVal.bind(this);
-		this.handleClick = this.handleClick.bind(this)
+		this.handleClick = this.handleClick.bind(this);
 		this.state = {
 			text:[],
 			location:{
@@ -25,6 +25,10 @@ export default class Home extends Component{
 			},
 			status:'pending',
 			isFetching:false,
+			userDetails:{
+				name:'',
+				room:''
+			},
 		}
 	}
 
@@ -49,7 +53,19 @@ export default class Home extends Component{
 		socket.on('disconnect',()=>{
 			console.log('Disconencted from Server');
 		});
+
 	}
+	
+	
+//	scrollToBottom(){
+//	  let clientHeight = ReactDOM.findDOMNode(this.msgBody).clientHeight;
+//	  let scrollTop    = ReactDOM.findDOMNode(this.msgBody).scrollTop;
+//	  let scrollHeight = ReactDOM.findDOMNode(this.msgBody).scrollHeight;
+//	  	
+//     console.log('clientHeight',clientHeight,'scrollTop',scrollTop,'scrollHeight',scrollHeight);
+//       //=> clientHeight 108, scrollTop 0, scrollHeight 124
+//		
+//	}
 	
 	componentDidMount(){
 		socket.on('new Message',(msgObj)=>{
@@ -63,6 +79,7 @@ export default class Home extends Component{
 			 msgStore.push(msgBox);
 			let totalMsg = this.state.text.concat(msgStore);	
 			this.setState({text:totalMsg});
+		
 		})
 	}
 	
@@ -81,6 +98,7 @@ export default class Home extends Component{
 			 alert('unable to fetch current location');
 			 this.setState({isFetching:false});
 		});
+			
 		
 		socket.on('newLocationMessage',(message)=>{
 			 this.setState({
@@ -102,7 +120,7 @@ export default class Home extends Component{
 			    </div>
 			  <div className="list-form">
 				<div> 
-					<MessageList className="message-list" message={this.state.text}  location={this.state.location}/>
+					<MessageList className="message-list" message={this.state.text}  location={this.state.location} ref={msg =>{this.msgBody = msg }}/>
 				</div>	
 				<div className="form-component">
 					<Form handleMsgValue = {this.handleMsgVal} handleClick = {this.handleClick} newStatus ={this.state.status} fetching ={this.state.isFetching}/>

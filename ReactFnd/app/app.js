@@ -1,14 +1,31 @@
-import React,{Component} from 'react';
+import React, {
+	Component
+} from 'react';
 import ReactDOM from 'react-dom';
+import {
+	BrowserRouter as Router,
+	Route,
+	Switch,
+} from 'react-router-dom';
 
+import Main from './components/Main';
 import Home from './components/Home'; 
-
+import LoginPage from './components/Login';
+import pageNotFound from './components/PageNotFound';
 
 
 
 require('style-loader!css-loader!sass-loader!styles/styles.scss');
 
 ReactDOM.render(
-	 <Home />,
+	<Router>
+	<Main>
+	<Switch>
+	    <Route exact={true} path="/" component={LoginPage}/>
+	    <Route path="/chat" component={Home} />
+		<Route component={pageNotFound}/>
+	</Switch>
+    </Main>
+	</Router>,
 	document.getElementById('main')
-)
+);

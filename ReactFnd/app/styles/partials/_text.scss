@@ -17,7 +17,6 @@
 		@include handle-fonts($font-size, bold);
 	}
 	.form-component {
-		position: absolute;
 		bottom: 0px;
 		background-color: $silver;
 		padding: 1rem;
@@ -29,10 +28,12 @@
 			margin-right: 1rem;
 			font-size: $font-size;
 		}
+		position:fixed;
 	}
 	.message-list {
 		top: 0px;
 		margin-bottom:1.5rem;
+		height:200px;
 	}
 	.sendBtn {
 		display: inline;
