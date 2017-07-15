@@ -37,9 +37,9 @@ export default class Form extends Component{
 render() {
 		const disabledStyle = {
 			opacity: 0.6,
-			paddingLeft: '0.35rem',
+			paddingLeft: '0.2rem',
 			paddingRight:'0.1rem',
-			right:20,
+			right:19,
 		};
 		const undisabledStyle = {
 			opacity: 1

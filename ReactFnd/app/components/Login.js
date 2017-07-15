@@ -70,10 +70,12 @@ export default class LoginPage extends Component {
 		if (userName.length !== 0 && room.length !== 0) {
 			this.name.value = "";
 			this.room.value = "";
+			
 			//handle space in room text,
 			let roomQuery = room.replace(/\s/g, '+');
-			window.location.href = `/chat?name=${userName}room=${roomQuery}`;
+			window.location.href = `/chat?name=${userName.trim()}&room=${roomQuery.trim()}`;
 		} else {
+			window.location.href ="/";
 			this.name.focus();
 		}
 	}
@@ -112,6 +114,3 @@ export default class LoginPage extends Component {
 			)
 		}
 	}
-LoginPage.propTypes ={
-	handleCollect:PropTypes.func.isRequired,
-}

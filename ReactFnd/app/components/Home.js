@@ -2,10 +2,14 @@ import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
 const io = require('socket.io-client');
 const moment = require('moment');
+import {
+	Redirect
+} from 'react-router-dom';
 
 import Form  from './form';
 import MessageList from './MessageList';
 import Members from './Members';
+
 
 
 const socket = io.connect(); 
@@ -16,6 +20,7 @@ export default class Home extends Component{
 		super(props);
 		this.handleMsgVal = this.handleMsgVal.bind(this);
 		this.handleClick = this.handleClick.bind(this);
+		this.deparam = this.deparam.bind(this);
 		this.state = {
 			text:[],
 			location:{
@@ -26,9 +31,10 @@ export default class Home extends Component{
 			status:'pending',
 			isFetching:false,
 			userDetails:{
-				name:'',
+				userName:'',
 				room:''
 			},
+			members:[]
 		}
 	}
 
@@ -53,7 +59,8 @@ export default class Home extends Component{
 		socket.on('disconnect',()=>{
 			console.log('Disconencted from Server');
 		});
-
+		
+		this.deparam();
 	}
 	
 	
@@ -66,6 +73,24 @@ export default class Home extends Component{
 //       //=> clientHeight 108, scrollTop 0, scrollHeight 124
 //		
 //	}
+	// from unifor resource identifier(uri) convert back to an objects,
+	deparam() {
+		let uri = window.location.search;
+		//"?name=arausi&room=some+course"
+		let nameParser = uri.match(/\w+&/);
+		let realName = nameParser.map(txt => txt.substring(0, (txt.length - 1)));
+		let userName = realName[0];
+		let roomParser = uri.match(/&.*=\w+\+?[\w+]+/ig);
+		let roomParserVal = roomParser[0];
+		let rmRoom = roomParserVal.replace(/^&room=/, '');
+		let room = rmRoom.replace(/\+/ig, ' ');
+		this.setState({
+			userDetails:{
+				userName,
+				room
+			}
+		})
+	}
 	
 	componentDidMount(){
 		socket.on('new Message',(msgObj)=>{
@@ -80,6 +105,23 @@ export default class Home extends Component{
 			let totalMsg = this.state.text.concat(msgStore);	
 			this.setState({text:totalMsg});
 		
+		})
+		socket.emit('joinRoom',this.state.userDetails,(err)=>{
+			if(err){
+				window.location.href ="/";
+			}else{
+				console.log('no Error');
+			}
+		})
+		
+		socket.on('updateUserList',(usersArray)=>{
+			 this.setState({members:[]});
+			  let members = []; 
+			   usersArray.map(user =>{
+				   members.push(user.name);
+			   });
+			  let newMembers = this.state.members.concat(members);
+			  this.setState({members:newMembers});
 		})
 	}
 	
@@ -116,7 +158,7 @@ export default class Home extends Component{
 		return(
 			<div>
 			 <div className="people">
-			      <Members />
+			      <Members users={this.state.members}/>
 			    </div>
 			  <div className="list-form">
 				<div> 
@@ -126,7 +168,6 @@ export default class Home extends Component{
 					<Form handleMsgValue = {this.handleMsgVal} handleClick = {this.handleClick} newStatus ={this.state.status} fetching ={this.state.isFetching}/>
 				</div>
 			    </div>
-			    
 			</div>	 
 		); 
 	}

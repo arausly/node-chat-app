@@ -12,7 +12,7 @@ const errStyle ={
 
 const pageNotFound = ({location}) =>(
 	<div>
-	<h1 style={errStyle}>Error 404 &nbsp; <code>{location.pathname}</code> &nbsp; Page Not Found</h1>
+	  <h1 style={errStyle}>Error 404 &nbsp; <code>{location.pathname}</code> &nbsp; Page Not Found</h1>
 	</div>
 )
 
