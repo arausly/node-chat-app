@@ -42,7 +42,6 @@ export default class Home extends Component{
 	handleMsgVal(val){
 		this.setState({status:"pending"});
 		socket.emit('createMessage',{
-			from:"Arausi Daniel",
 			text:val
 		},()=>{
 			this.setState({status:'finished'});
