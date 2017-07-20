@@ -107,7 +107,7 @@ export default class Home extends Component{
 		})
 		socket.emit('joinRoom',this.state.userDetails,(err)=>{
 			if(err){
-				window.location.href ="/";
+				window.location.href ="/login";
 			}else{
 				console.log('no Error');
 			}

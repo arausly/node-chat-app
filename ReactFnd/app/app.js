@@ -12,6 +12,7 @@ import Main from './components/Main';
 import Home from './components/Home'; 
 import LoginPage from './components/Login';
 import pageNotFound from './components/PageNotFound';
+import SignInPage from './components/SignInPage';
 
 
 
@@ -21,7 +22,8 @@ ReactDOM.render(
 	<Router>
 	<Main>
 	<Switch>
-	    <Route exact={true} path="/" component={LoginPage}/>
+	    <Route exact={true} path="/" component={SignInPage} />
+	    <Route exact={true} path="/login" component={LoginPage}/>
 	    <Route path="/chat" component={Home} />
 		<Route component={pageNotFound}/>
 	</Switch>

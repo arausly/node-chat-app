@@ -15,12 +15,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.17.2",
     "express": "^4.15.3",
     "moment": "^2.18.1",
     "mongodb": "^2.2.30",
     "mongoose": "^4.10.8",
     "socket.io": "^2.0.3",
-    "urijs": "^1.18.10"
+    "urijs": "^1.18.10",
+    "validator": "^8.0.0"
   },
   "devDependencies": {
     "expect": "^1.20.2",

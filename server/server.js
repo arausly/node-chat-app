@@ -2,6 +2,7 @@ const express = require('express');
 const http = require('http');
 const path = require('path');
 const socketIO = require('socket.io');
+const bodyParser = require('body-parser');
 
 const {
 	generateMessage,
@@ -14,7 +15,7 @@ const {
 
 const {
 	User
-} = require('./database.js');
+} = require('./database/UserSchema');
 
 const {
 	ObjectID
@@ -23,6 +24,8 @@ const {
 let app = express();
 
 app.use(express.static(path.join(__dirname, '..', 'ReactFnd', 'public')));
+
+app.use(bodyParser.json());
 
 let port = process.env.PORT || 9000;
 
@@ -108,7 +111,13 @@ io.on('connection', (socket) => {
 
 app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '..', 'ReactFnd', 'public', 'index.html'));
-})
+});
+
+
+app.post('/signIn',(req,res)=>{
+     const {name,email,password} = req.body;
+	 res.send('something');
+});
 
 server.listen(port, () => {
 	console.log(`app is listening on port ${port}`);

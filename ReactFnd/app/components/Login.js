@@ -75,7 +75,7 @@ export default class LoginPage extends Component {
 			let roomQuery = room.replace(/\s/g, '+');
 			window.location.href = `/chat?name=${userName.trim()}&room=${roomQuery.trim()}`;
 		} else {
-			window.location.href ="/";
+			window.location.href ="/login";
 			this.name.focus();
 		}
 	}
