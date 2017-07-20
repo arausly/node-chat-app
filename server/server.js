@@ -46,9 +46,11 @@ io.on('connection', (socket) => {
 	console.log('New user connected');
 
 	socket.on('createLocationMessage', (locationObj) => {
-		 User.findOne({socketId:socket.id}).then(docs=>{
-			 io.to(docs.room).emit('newLocationMessage', generateLocationMessage(docs.name, locationObj.latitude, locationObj.longitude));
-		 })
+		User.findOne({
+			socketId: socket.id
+		}).then(docs => {
+			io.to(docs.room).emit('newLocationMessage', generateLocationMessage(docs.name, locationObj.latitude, locationObj.longitude));
+		})
 	})
 
 	socket.on('joinRoom', (params, callback) => {
@@ -74,7 +76,9 @@ io.on('connection', (socket) => {
 
 
 			newUser.save().then((docs) => {
-				User.find({room:params.room}).then(docs => io.to(params.room).emit('updateUserList', docs));
+				User.find({
+					room: params.room
+				}).then(docs => io.to(params.room).emit('updateUserList', docs));
 			}, (err) => {
 				if (err) {
 					console.log("ERROR START HERE", err);
@@ -114,9 +118,29 @@ app.get('*', (req, res) => {
 });
 
 
-app.post('/signIn',(req,res)=>{
-     const {name,email,password} = req.body;
-	 res.send('something');
+app.post('/signIn', (req, res) => {
+	const {
+		name,
+		email,
+		password
+	} = req.body;
+	let newUser = new User({
+		email,
+		name,
+		password
+	})
+
+	newUser.save().then((docs) => {
+		if(!docs){
+			return Promise.reject();
+		}
+		res.status(200).send({
+			name,
+			id: docs._id
+		})
+	}).catch(err => {
+		res.status(400).send()})
+	
 });
 
 server.listen(port, () => {

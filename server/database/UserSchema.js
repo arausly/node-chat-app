@@ -27,11 +27,9 @@ const userSchema = new Schema({
 		type: String,
 		trim: true,
 		minlength: 3,
-		required: true,
 	},
 	socketId: {
 		type: String,
-		required: true,
 	},
 	password: {
 		type: String,
@@ -47,6 +45,8 @@ const userSchema = new Schema({
 			},
 			message:"{VALUE} is invalid"
 		},
+		unique:true,
+		required:true,
 	}
 });
 

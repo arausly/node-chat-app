@@ -60,9 +60,8 @@ export default class SignInPage extends Component {
 					password: confirmedPwd,
 					email
 				}).then(res => {
-					if (res) {
-						alert('Yea');
-					}
+					 const {name,id} = res.data;
+					 window.location.href =`/login?name=${name}&id=${id}`;
 				}).catch(err => {
 					if (err) {
 						alert('Nah')
